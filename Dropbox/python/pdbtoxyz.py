@@ -4,9 +4,7 @@
 import os
 import argparse
 import numpy as np
-
-
-
+import time
 
 #command line parameters
 parser = argparse.ArgumentParser(description='Process some integers.')
@@ -198,6 +196,7 @@ if __name__ == "__main__":
 	ref_coordinates -= centroid(ref_coordinates)
 	
 	max_files = int(args.max_files)
+	
 	for xyz_file in xyz_files:
 		coordinates = (read_xyz(xyz_file))
 		
@@ -205,11 +204,23 @@ if __name__ == "__main__":
 		#centroid = np.mean(coordinates[:,-3:], axis = 0)
 		
 		#coordinates = np.subtract(coordinates, centroid)
+		start_time = time.clock()
 		coordinates -= centroid(coordinates)
-	
+		print (time.clock() - start_time)
+		print (xyz_file)
+		
+		start_time = time.clock()
 		print ("Normal RMSD:", rmsd(coordinates, ref_coordinates))
+		print (time.clock() - start_time)
+		
+		start_time = time.clock()
 		print ("Kabsch RMSD:", kabsch_rmsd(coordinates, ref_coordinates))
+		print (time.clock() - start_time)
+		
+		start_time = time.clock()
 		print ("Fitted RMSD:", fit(coordinates, ref_coordinates))
+		print (time.clock() - start_time)
+		
 		max_files += -1
 		if max_files == 0:
 			break
